@@ -1,11 +1,14 @@
 files_lexer = files(
-  'lexer.h',
-  'lexer.cpp'
+  'token.hpp',
+  'token.cpp',
+  'main.cpp',
+  'stream.hpp',
+  'tokenizer.hpp'
 )
 
 glsl_compiler = executable(
   'main',
-  'lexer.cpp',
+  files_lexer,
   c_args : [],
   cpp_args : [],
   dependencies : [],
