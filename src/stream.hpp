@@ -40,8 +40,8 @@ class item {
    public:
     item(const T & car, const stream<T> & cdr) : _cons(new cons<T>(car, cdr)){}
 
-    T value() {
-      return _cons.car();
+    T value() const {
+      return _cons->car();
     }
 
    private:
@@ -55,8 +55,8 @@ class stream {
   }
   stream() {}
 
-  T get() {
-    return _lazied->force()->value();
+  T get() const {
+    return _lazied->force().value();
   }
 private:
   std::shared_ptr<suspension<const item<T>>> _lazied; 
