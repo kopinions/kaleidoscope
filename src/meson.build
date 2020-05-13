@@ -3,7 +3,8 @@ files_lexer = files(
   'token.cpp',
   'main.cpp',
   'stream.hpp',
-  'tokenizer.hpp'
+  'tokenizer.hpp',
+  'tokenizer.cpp'
 )
 
 glsl_compiler = executable(

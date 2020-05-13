@@ -1,3 +1,5 @@
+#ifndef STREAM_HPP
+#define STREAM_HPP
 #include <functional>
 #include <memory>
 
@@ -16,7 +18,47 @@ class suspension {
   std::unique_ptr<T> mutable _memo;
 };
 
+template <typename T> class stream;
+  
+template <typename T>
+class cons {
+ public:
+  cons(const T & car, const stream<T> & cdr): _car(car), _cdr(cdr) {}
+  stream<T> cdr() const{
+    return _cdr;
+  }
+ T car() const {
+    return _car;
+  }
+ private:
+  T _car;
+  stream<T> _cdr;
+};
+
+template  <typename T>
+class item {
+   public:
+    item(const T & car, const stream<T> & cdr) : _cons(new cons<T>(car, cdr)){}
+
+    T value() {
+      return _cons.car();
+    }
+
+   private:
+    std::unique_ptr<const cons<T>> _cons; 
+};
+
 template<typename T>
 class stream {
- private:
+ public:
+  stream(std::function<std::unique_ptr<const item<T>>()> f) : _lazied(std::make_shared<suspension<const item<T>>>(f)){
+  }
+  stream() {}
+
+  T get() {
+    return _lazied->force()->value();
+  }
+private:
+  std::shared_ptr<suspension<const item<T>>> _lazied; 
 };
+#endif// STREAM_HPP

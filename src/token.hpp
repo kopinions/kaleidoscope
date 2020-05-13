@@ -1,3 +1,5 @@
+#ifndef TOKEN_HPP
+#define TOKEN_HPP
 #include <string>
 
 class token {
@@ -7,4 +9,13 @@ public:
     double d;
     std::string s;
   };
+
+  explicit token(type t, std::string  v) {
+    _t = t;
+  }
+  
+ private:
+  token::type _t;
 };
+
+#endif// TOKEN_HPP
