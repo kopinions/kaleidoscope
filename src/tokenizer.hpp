@@ -2,12 +2,12 @@
 #define TOKENIZER_HPP
 #include <iostream>
 
-#include "stream.hpp"
 #include "token.hpp"
+#include <list>
 
 class tokenizer {
 public:
-  stream<token> tokenize(const std::istream &in);
+  std::unique_ptr<std::list<token>> tokenize(const std::string &in) ;
 };
 
 #endif // TOKENIZER_HPP

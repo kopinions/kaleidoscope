@@ -2,6 +2,6 @@
 
 int main(int argc, char **argv) {
   tokenizer to;
-  to.tokenize(std::cin).get();
+  to.tokenize("");
   return 0;
 }

@@ -5,7 +5,7 @@
 
 template <typename T> class suspension {
 public:
-  suspension(std::function<std::unique_ptr<T>()> const &f) : _f(f){};
+  explicit suspension(std::function<std::unique_ptr<T>()> const &f) : _f(f){};
   T const &force() const {
     if (!_memo) {
       _memo = _f();
