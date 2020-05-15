@@ -2,12 +2,12 @@
 #define TOKENIZER_HPP
 #include <iostream>
 
-#include "token.hpp"
 #include "stream.hpp"
+#include "token.hpp"
 
 class tokenizer {
- public:
+public:
   stream<token> tokenize(const std::istream &in);
 };
 
-#endif// TOKENIZER_HPP
+#endif // TOKENIZER_HPP

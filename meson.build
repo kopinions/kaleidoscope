@@ -6,9 +6,11 @@ project(
   ).stdout(),
   license : 'MIT',
   meson_version : '>= 0.5.0',
-  default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release', 'c_std=c11', 'cpp_std=c++14']
+  default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release', 'c_std=c11', 'cpp_std=c++17']
 )
 
+cc = meson.get_compiler('c')
+cpp = meson.get_compiler('cpp')
 subdir('include')
 subdir('bin')
 subdir('src')

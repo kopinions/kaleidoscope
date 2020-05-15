@@ -13,16 +13,13 @@ public:
     value(std::string v) : s(v) {}
     ~value() {}
   };
-  
-  explicit token(type t, std::string v): _t(t), _v{v} {
-    
-  }
 
-  token(const token & tok) {
+  explicit token(type t, std::string v) : _t(t), _v{v} {}
+
+  token(const token &tok) {
     _t = tok._t;
     _v.s = {tok._v.s};
   }
-    
 
 private:
   type _t;

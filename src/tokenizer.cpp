@@ -14,7 +14,7 @@ stream<token> tokenizer::tokenize(const std::istream &in) {
     return std::make_unique<item<token>>(token(token::type::def, t),
                                          stream<token>());
   };
-  
+
   func = [&] {
     std::string t;
     std::cin >> t;
