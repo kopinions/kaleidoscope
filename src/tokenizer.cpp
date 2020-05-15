@@ -4,8 +4,8 @@
 #include <iostream>
 #include <string>
 
-std::unique_ptr<std::list<token>> tokenizer::tokenize(const std::string &in) {
-  auto toks = new std::list<token>();
-  toks->push_back(token(token::type::number, ""));
-  return std::move(std::unique_ptr<std::list<token>>(toks));
+std::list<token> tokenizer::tokenize(const std::string &in) {
+  std::list<token> toks;
+  toks.push_back(token(token::type::number, ""));
+  return toks;
 }

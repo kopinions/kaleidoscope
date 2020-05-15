@@ -7,7 +7,7 @@
 
 class tokenizer {
 public:
-  std::unique_ptr<std::list<token>> tokenize(const std::string &in) ;
+  std::list<token> tokenize(const std::string &in);
 };
 
 #endif // TOKENIZER_HPP
