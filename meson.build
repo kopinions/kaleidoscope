@@ -6,7 +6,7 @@ project(
   ).stdout(),
   license : 'MIT',
   meson_version : '>= 0.5.0',
-  default_options : ['buildtype=debugoptimized', 'b_ndebug=if-release', 'c_std=c11', 'cpp_std=c++17']
+  default_options : ['buildtype=debug', 'b_ndebug=if-release', 'c_std=c11', 'cpp_std=c++17']
 )
 
 cc = meson.get_compiler('c')

@@ -32,13 +32,16 @@ public:
     std::cout << "move constructor called" << std::endl;
   }
 
+  type type() {
+    return _t;
+  }
+
   ~token() {
     std::cout << "deconstrcuted" << std::endl;
-    
   }
 
 private:
-  type _t;
+  enum type _t;
   value _v;
 };
 
