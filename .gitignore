@@ -51,3 +51,5 @@ flycheck_*.el
 
 build
 # End of https://www.gitignore.io/api/emacs
+/subprojects/googletest-release-1.10.0/
+/subprojects/packagecache/

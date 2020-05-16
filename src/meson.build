@@ -7,7 +7,7 @@ files_lexer = files(
   'tokenizer.cpp'
 )
 
-glsl_compiler = executable(
+main = executable(
   'main',
   files_lexer,
   c_args : [],
