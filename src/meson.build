@@ -1,20 +1,24 @@
-files_lexer = files(
-  'token.hpp',
+inc_src = include_directories('.')
+
+parser_files = files(
   'token.cpp',
-  'main.cpp',
-  'stream.hpp',
-  'tokenizer.hpp',
   'tokenizer.cpp'
+)
+
+libparser = static_library(
+  'parser',
+  [parser_files],
+  include_directories : [inc_src],
+  dependencies : []
 )
 
 main = executable(
   'main',
-  files_lexer,
+  'main.cpp',
   c_args : [],
   cpp_args : [],
   dependencies : [],
-  include_directories : [],
-  link_with : [],
-  #link_args : ['-Wl,-sysroot,/usr/lib','-Wl,-L,/usr/local/Cellar/llvm/10.0.0_3/lib:/usr/lib:/usr/local/lib'],
+  include_directories : [inc_src],
+  link_with : [libparser],
   build_by_default : true
 )
