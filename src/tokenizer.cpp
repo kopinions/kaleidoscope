@@ -78,9 +78,8 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       } else if (identifier_ == "extern") {
 	std::cout << "ceshi" << std::endl;
 	toks.push_back(std::make_unique<token>(token::type::ext, value("extern")));
-	
       } else {
-	toks.push_back(std::make_unique<token>(token::type::ext, identifier_));
+	toks.push_back(std::make_unique<token>(token::type::identifier, identifier_));
       }
       continue;
     }
