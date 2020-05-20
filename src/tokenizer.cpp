@@ -28,9 +28,9 @@ public:
       auto a = std::make_optional<int>(*_it);
       _it++;
       return a;
-    } else {
-      return std::nullopt;
     }
+    
+    return std::nullopt;
   }
 
   std::optional<int> prev() {
@@ -41,10 +41,8 @@ public:
       
       _it--;
       return a;
-      
-    } else {
-      return std::nullopt;
-    }
+    } 
+    return std::nullopt;
   }
 
 private:
@@ -55,11 +53,11 @@ private:
   std::string _context;
 };
 
-std::list<token> tokenizer::tokenize(const std::string &in) {
-  std::list<token> toks;
+std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
+  std::list<std::unique_ptr<token>> toks;
   context ctx(in);
   for(auto last=ctx.next(); last!= std::nullopt; last = ctx.next()){
-    std::string identifier;
+    std::string identifier_;
     
     while (std::isspace(*last)) {
       last = ctx.next();
@@ -69,18 +67,20 @@ std::list<token> tokenizer::tokenize(const std::string &in) {
     }
 
     if (std::isalpha(*last)) {
-      identifier = *last;
+      identifier_ = *last;
       while (std::isalnum(*(last = ctx.next()))) {
-	identifier += *last;
+	identifier_ += *last;
       }
 
-      std::cout << identifier << std::endl;
-      if (identifier == "def") {
-	toks.push_back(token(token::type::def, ""));
-      } else if (identifier == "extern") {
-	toks.push_back(token(token::type::ext, ""));
+      std::cout << identifier_ << std::endl;
+      if (identifier_ == "def") {
+	toks.push_back(std::make_unique<token>(token::type::def, value("def")));
+      } else if (identifier_ == "extern") {
+	std::cout << "ceshi" << std::endl;
+	toks.push_back(std::make_unique<token>(token::type::ext, value("extern")));
+	
       } else {
-	toks.push_back(token(token::type::identifier, identifier));
+	toks.push_back(std::make_unique<token>(token::type::ext, identifier_));
       }
       continue;
     }
