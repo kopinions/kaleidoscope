@@ -23,6 +23,13 @@ TEST(tokenizer, should_able_to_parse_identifier_token) {
   ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::identifier));
 }
 
+TEST(tokenizer, should_able_to_parse_number_token) {
+  tokenizer to;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("1");
+  ASSERT_THAT(toks.size(), 1);
+  ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::number));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

@@ -83,6 +83,16 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       }
       continue;
     }
+
+    if (std::isdigit(*last) || *last == '.') {
+      std::string numstr;
+      do {
+        numstr += *last;
+        last = ctx.next();
+      } while (std::isdigit(*last) || *last == '.');
+      toks.push_back(std::make_unique<token>(token::type::number, numstr));
+      continue;
+    }
   }
   
   return toks;
