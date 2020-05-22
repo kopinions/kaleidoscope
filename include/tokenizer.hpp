@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
 #include "token.hpp"
+#include <mutex>
 #include <iostream>
 #include <list>
 #include <optional>
