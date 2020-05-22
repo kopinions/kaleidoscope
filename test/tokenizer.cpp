@@ -34,6 +34,8 @@ TEST(tokenizer, should_able_to_parse_comment) {
   tokenizer to;
   std::list<std::unique_ptr<token>> toks = to.tokenize("#this is a comment\n");
   ASSERT_THAT(toks.size(), 0);
+  toks = to.tokenize("#this is a comment without newline");
+  ASSERT_THAT(toks.size(), 0);
 }
 
 int main(int argc, char **argv) {
