@@ -72,11 +72,9 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
 	identifier_ += *last;
       }
 
-      std::cout << identifier_ << std::endl;
       if (identifier_ == "def") {
 	toks.push_back(std::make_unique<token>(token::type::def, value("def")));
       } else if (identifier_ == "extern") {
-	std::cout << "ceshi" << std::endl;
 	toks.push_back(std::make_unique<token>(token::type::ext, value("extern")));
       } else {
 	toks.push_back(std::make_unique<token>(token::type::identifier, identifier_));
@@ -91,6 +89,14 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
         last = ctx.next();
       } while (std::isdigit(*last) || *last == '.');
       toks.push_back(std::make_unique<token>(token::type::number, numstr));
+      continue;
+    }
+
+    if (*last == '#') {
+      do {
+        std::cout << *last << std::endl;
+        last = ctx.next();
+      } while (*last != '\n' && *last !='\r' && last != std::nullopt);
       continue;
     }
   }

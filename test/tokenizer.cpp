@@ -30,6 +30,12 @@ TEST(tokenizer, should_able_to_parse_number_token) {
   ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::number));
 }
 
+TEST(tokenizer, should_able_to_parse_comment) {
+  tokenizer to;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("#this is a comment\n");
+  ASSERT_THAT(toks.size(), 0);
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
