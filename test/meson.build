@@ -1,7 +1,7 @@
 tokenizer = executable(
   'tokenizer',
   'tokenizer.cpp',
-  include_directories : [inc_src],
+  include_directories : [inc_src, inc_headers],
   dependencies : [
     gtest_dep,
     gmock_dep

@@ -1,8 +1,6 @@
 inc_src = include_directories('.')
 
 parser_files = files(
-  'token.cpp',
-  'tokenizer.cpp'
 )
 
 libparser = static_library(
