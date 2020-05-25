@@ -15,6 +15,12 @@ public:
   variable() : node() {}
 };
 
+
+class number : public node {
+public:
+  number() : node() {}
+};
+
 } // namespace ast
 
 #endif // AST_HPP
