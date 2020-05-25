@@ -77,7 +77,7 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       } else if (identifier_ == "extern") {
 	toks.push_back(std::make_unique<token>(token::type::ext, value("extern")));
       } else {
-	toks.push_back(std::make_unique<token>(token::type::identifier, identifier_));
+	toks.push_back(std::make_unique<token>(token::type::identifier, value(identifier_)));
       }
       continue;
     }
@@ -94,12 +94,12 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
 
     if (*last == '#') {
       do {
-        std::cout << *last << std::endl;
         last = ctx.next();
       } while (*last != '\n' && *last !='\r' && last != std::nullopt);
       continue;
     }
   }
-  
+
+  toks.push_back(std::make_unique<token>(token::type::eof, value("")));
   return toks;
 }
