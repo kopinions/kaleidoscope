@@ -14,7 +14,7 @@ private:
 };
 class token {
 public:
-  enum type { eof = -1, def = -2, ext = -3, identifier = -4, number = -5 };
+  enum type { eof = -1, def = -2, ext = -3, identifier = -4, number = -5, singular=-6 };
   token(type t, value val) : _type(t), _val(std::make_unique<value>(val)) {}
   std::unique_ptr<value> val() { return std::move(_val); }
   enum type type() { return _type; }

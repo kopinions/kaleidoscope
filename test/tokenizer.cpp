@@ -45,6 +45,15 @@ TEST(tokenizer, should_able_to_return_eof_token) {
   ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::eof));
 }
 
+TEST(tokenizer, should_able_to_return_singular_token) {
+  tokenizer to;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("a + b");
+  ASSERT_THAT(toks.size(), 4);
+  ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::identifier));
+  toks.pop_front();
+  ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::singular));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

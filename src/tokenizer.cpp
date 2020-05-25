@@ -30,7 +30,7 @@ public:
       _it++;
       return a;
     }
-    
+
     return std::nullopt;
   }
 
@@ -39,10 +39,10 @@ public:
 
     if (_it != _begin) {
       auto a = std::make_optional<int>(*_it);
-      
+
       _it--;
       return a;
-    } 
+    }
     return std::nullopt;
   }
 
@@ -57,28 +57,30 @@ private:
 std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
   std::list<std::unique_ptr<token>> toks;
   context ctx(in);
-  for(auto last=ctx.next(); last!= std::nullopt; last = ctx.next()){
+  for (auto last = ctx.next(); last != std::nullopt; last = ctx.next()) {
     std::string identifier_;
-    
+
     while (std::isspace(*last)) {
       last = ctx.next();
       if (last == std::nullopt) {
-	return toks;
+        return toks;
       }
     }
 
     if (std::isalpha(*last)) {
       identifier_ = *last;
       while (std::isalnum(*(last = ctx.next()))) {
-	identifier_ += *last;
+        identifier_ += *last;
       }
 
       if (identifier_ == "def") {
-	toks.push_back(std::make_unique<token>(token::type::def, value("def")));
+        toks.push_back(std::make_unique<token>(token::type::def, value("def")));
       } else if (identifier_ == "extern") {
-	toks.push_back(std::make_unique<token>(token::type::ext, value("extern")));
+        toks.push_back(
+            std::make_unique<token>(token::type::ext, value("extern")));
       } else {
-	toks.push_back(std::make_unique<token>(token::type::identifier, value(identifier_)));
+        toks.push_back(std::make_unique<token>(token::type::identifier,
+                                               value(identifier_)));
       }
       continue;
     }
@@ -96,9 +98,13 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
     if (*last == '#') {
       do {
         last = ctx.next();
-      } while (*last != '\n' && *last !='\r' && last != std::nullopt);
+      } while (*last != '\n' && *last != '\r' && last != std::nullopt);
       continue;
     }
+    std::string singular ;
+    singular += *last;
+    toks.push_back(
+        std::make_unique<token>(token::type::singular, value(singular)));
   }
 
   toks.push_back(std::make_unique<token>(token::type::eof, value("")));
