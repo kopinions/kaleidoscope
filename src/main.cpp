@@ -1,4 +1,4 @@
-#include "tokenizer.hpp"
+#include "../include/tokenizer.hpp"
 
 int main(int argc, char **argv) {
   tokenizer to;

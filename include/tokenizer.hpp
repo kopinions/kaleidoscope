@@ -1,10 +1,16 @@
-#include "tokenizer.hpp"
-#include "stream.hpp"
+#ifndef TOKENIZER_HPP
+#define TOKENIZER_HPP
 #include "token.hpp"
 #include <mutex>
 #include <iostream>
+#include <list>
 #include <optional>
 #include <string>
+
+class tokenizer {
+public:
+  std::list<std::unique_ptr<token>> tokenize(const std::string &in);
+};
 
 class context {
 public:
@@ -101,7 +107,7 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       } while (*last != '\n' && *last != '\r' && last != std::nullopt);
       continue;
     }
-    std::string singular ;
+    std::string singular;
     singular += *last;
     toks.push_back(
         std::make_unique<token>(token::type::singular, value(singular)));
@@ -110,3 +116,5 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
   toks.push_back(std::make_unique<token>(token::type::eof, value("")));
   return toks;
 }
+
+#endif // TOKENIZER_HPP
