@@ -39,7 +39,15 @@ private:
   std::list<std::unique_ptr<ast::node>> parameters;
 };
 
-class compound : public node {};
+class compound : public node {
+public:
+  compound(std::list<std::unique_ptr<node>> compounded)
+      : compounded(std::move(compounded)) {
+
+  }
+private:
+  std::list<std::unique_ptr<ast::node>> compounded;
+};
 
 class function_definition : public node {
 public:
