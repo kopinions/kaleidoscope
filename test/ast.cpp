@@ -36,8 +36,9 @@ TEST(ast, should_able_to_parse_number_ast) {
 TEST(ast, should_able_to_parse_def_ast) {
   tokenizer to;
   parser parser;
-  std::list<std::unique_ptr<token>> toks = to.tokenize("def test(a)"
-                                                       "a");
+  std::list<std::unique_ptr<token>> toks = to.tokenize("def test(a) {"
+                                                       "a;"
+                                                       "}");
   translation_unit tu = parser.parse(toks);
   ASSERT_THAT(tu.size(), testing::Eq(1));
   testing::Matcher<ast::node *> matcher = testing::ResultOf(
