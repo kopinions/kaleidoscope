@@ -107,10 +107,31 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       } while (*last != '\n' && *last != '\r' && last != std::nullopt);
       continue;
     }
-    std::string singular;
-    singular += *last;
-    toks.push_back(
-        std::make_unique<token>(token::type::singular, value(singular)));
+
+    switch (*last) {
+    case '+':
+      toks.push_back(std::make_unique<token>(token::type::plus,
+                                             value(std::string(1, *last))));
+      break;
+    case '(':
+      toks.push_back(std::make_unique<token>(token::type::lparen,
+                                             value(std::string(1, *last))));
+      break;
+    case ')':
+      toks.push_back(std::make_unique<token>(token::type::rparen,
+                                             value(std::string(1, *last))));
+      break;
+    case '{':
+      toks.push_back(std::make_unique<token>(token::type::lbracket,
+                                             value(std::string(1, *last))));
+      break;
+    case '}':
+      toks.push_back(std::make_unique<token>(token::type::rbracket,
+                                             value(std::string(1, *last))));
+      break;
+    default:
+      continue;
+    }
   }
 
   toks.push_back(std::make_unique<token>(token::type::eof, value("")));

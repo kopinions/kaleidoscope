@@ -34,9 +34,9 @@ private:
   function_definition(std::list<std::unique_ptr<token>>::const_iterator &it) {
     it++; // def
     std::list<std::unique_ptr<ast::node>> args;
-    if ((*it)->type() == token::type::identifier) {
+    if ((*it)->type() == token::type::lparen) {
       it++;
-      while((*it)->type() != token::type::singular) {
+      while((*it)->type() != token::type::rparen) {
         args.push_back(std::make_unique<ast::variable>());
         it++;
       }
@@ -45,7 +45,7 @@ private:
     auto prototype = std::make_unique<ast::function>((*it)->val()->string(),
                                                      std::move(args));
     std::list<std::unique_ptr<ast::node>> compounded;
-    while((*it)->type() != token::type::singular) {
+    while((*it)->type() != token::type::rbracket) {
       compounded.push_back(std::make_unique<ast::variable>());
       it++;
     }

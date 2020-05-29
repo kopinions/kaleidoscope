@@ -16,12 +16,27 @@ private:
 class token {
 public:
   enum type {
-    eof = -1,
-    def = -2,
-    ext = -3,
-    identifier = -4,
-    number = -5,
-    singular = -6
+    eof,
+    def,
+    ext,
+    identifier,
+    number,
+    singular,
+    lparen,
+    rparen,
+    lbracket,
+    rbracket,
+    plus,
+    hyphen,
+    comma,
+    colon,
+    semicolon,
+    asterisk,
+    slash,
+    pound,
+    backslash,
+    tilde,
+    period
   };
   token(type t, value val) : _type(t), _val(std::make_unique<value>(val)) {}
   std::unique_ptr<value> val() { return std::move(_val); }
