@@ -38,7 +38,13 @@ public:
   function(std::string identifier,
            std::list<std::unique_ptr<ast::node>> parameters)
       : identifier(identifier), parameters(std::move(parameters)) {}
-  virtual void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+  virtual void accept(std::shared_ptr<ir_visitor> v) override {
+    v->visit(this);
+  }
+
+  std::string name() {
+    return identifier;
+  }
 
 private:
   std::unique_ptr<type> returned;
@@ -48,7 +54,9 @@ private:
 
 class compound : public node {
 public:
-  virtual void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+  virtual void accept(std::shared_ptr<ir_visitor> v) override {
+    v->visit(this);
+  }
 
   compound(std::list<std::unique_ptr<node>> compounded)
       : compounded(std::move(compounded)) {}
@@ -58,16 +66,22 @@ private:
 };
 
 class function_definition : public node {
+  friend class ir_visitor;
 public:
-  virtual void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+  virtual void accept(std::shared_ptr<ir_visitor> v) override {
+    v->visit(this);
+  }
 
   function_definition(std::unique_ptr<function> prototype,
                       std::unique_ptr<compound> body)
-      : prototype(std::move(prototype)), body(std::move(body)) {}
+      : _prototype(std::move(prototype)), _body(std::move(body)) {}
+
+  function* prototype() { return _prototype.get(); }
+  compound* body() { return _body.get(); }
 
 private:
-  std::unique_ptr<function> prototype;
-  std::unique_ptr<compound> body;
+  std::unique_ptr<function> _prototype;
+  std::unique_ptr<compound> _body;
 };
 
 } // namespace ast

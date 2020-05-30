@@ -19,19 +19,23 @@ public:
   default_ir_visitor() {}
   virtual ~default_ir_visitor(){};
 
-  virtual void visit(ast::function_definition *def) {}
+  virtual void visit(ast::function_definition *def) {
+    visit(def->prototype());
+    visit(def->body());
+  }
   virtual void visit(ast::variable *) {}
   virtual void visit(ast::number *) {}
   virtual void visit(ast::type *) {}
-  virtual void visit(ast::function *) {}
+  virtual void visit(ast::function * f) {
+//    Function *TheFunction = TheModule->getFunction(f->getName());
+  }
   virtual void visit(ast::compound *) {}
 
-  virtual std::list<std::unique_ptr<llvm::Value*>> collect() {
-    std::list<std::unique_ptr<llvm::Value*>> a;
-//    ConstantFP::get(TheContext, llvm::APFloat(1));
-    return a;
+  virtual std::list<std::shared_ptr<llvm::Value*>> collect() {
+    return values;
   }
 private:
+  std::list<std::shared_ptr<llvm::Value*>> values;
 //  static llvm::LLVMContext TheContext;
 //  static llvm::IRBuilder<> Builder(TheContext);
 //  static std::unique_ptr<llvm::Module> TheModule;
