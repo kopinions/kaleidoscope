@@ -1,6 +1,7 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
 #include "token.hpp"
+#include <mutex>
 #include <iostream>
 #include <list>
 #include <optional>
@@ -74,7 +75,7 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
 
     if (std::isalpha(*last)) {
       identifier_ = *last;
-      while (std::isalnum(*(last = ctx.next()))) {
+      while ((last = ctx.next()) != std::nullopt && std::isalnum(*last)) {
         identifier_ += *last;
       }
 
