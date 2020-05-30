@@ -15,7 +15,9 @@ main = executable(
   'main.cpp',
   c_args : [],
   cpp_args : [],
-  dependencies : [],
+  dependencies : [
+  llvm_dep
+  ],
   include_directories : [inc_src],
   link_with : [libparser],
   build_by_default : true

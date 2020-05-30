@@ -11,6 +11,9 @@ project(
 
 cc = meson.get_compiler('c')
 cpp = meson.get_compiler('cpp')
+
+llvm_dep = dependency('llvm', version : '>=9.0')
+
 subdir('include')
 subdir('bin')
 

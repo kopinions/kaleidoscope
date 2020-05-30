@@ -1,6 +1,7 @@
 #include "ast.hpp"
 #include "parser.hpp"
 #include "tokenizer.hpp"
+#include "default_ir_visitor.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -57,6 +58,8 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
   testing::Matcher<ast::node *> matcher = testing::ResultOf(
       & instanceof <ast::function_definition, ast::node>, testing::IsTrue());
   EXPECT_TRUE(matcher.Matches(tu.front().get()));
+  auto visitor = std::make_shared<default_ir_visitor>();
+  tu.front()->accept(visitor);
 }
 
 int main(int argc, char **argv) {
