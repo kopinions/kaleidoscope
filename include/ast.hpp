@@ -37,19 +37,27 @@ class function : public node {
 public:
   function(std::string identifier,
            std::list<std::unique_ptr<ast::node>> parameters)
-      : identifier(identifier), parameters(std::move(parameters)) {}
+      : _identifier(identifier), _parameters(std::move(parameters)) {}
   virtual void accept(std::shared_ptr<ir_visitor> v) override {
     v->visit(this);
   }
 
-  std::string name() {
-    return identifier;
+  std::string identifier() {
+    return _identifier;
+  }
+
+  std::list<std::reference_wrapper<ast::node>> parameters() {
+    std::list<std::reference_wrapper<ast::node>> parametersRefs;
+    for (auto &ptr : _parameters) {
+      parametersRefs.push_back(std::ref(*ptr));
+    }
+    return parametersRefs;
   }
 
 private:
   std::unique_ptr<type> returned;
-  std::string identifier;
-  std::list<std::unique_ptr<ast::node>> parameters;
+  std::string _identifier;
+  std::list<std::unique_ptr<ast::node>> _parameters;
 };
 
 class compound : public node {
