@@ -69,16 +69,16 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
   for (auto last = ctx.next(); last != std::nullopt; last = ctx.next()) {
     std::string identifier_;
 
-    while (utils::isspace(*last)) {
+    while (utils::isspace(last)) {
       last = ctx.next();
       if (last == std::nullopt) {
         return toks;
       }
     }
 
-    if (utils::isalpha(*last)) {
+    if (utils::isalpha(last)) {
       identifier_ = *last;
-      while ((last = ctx.next()) != std::nullopt && utils::isalnum(*last)) {
+      while ((last = ctx.next()) != std::nullopt && utils::isalnum(last)) {
         identifier_ += *last;
       }
 
@@ -94,12 +94,12 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       continue;
     }
 
-    if (utils::isdigit(*last) || *last == '.') {
+    if (utils::isdigit(last) || *last == '.') {
       std::string numstr;
       do {
         numstr += *last;
         last = ctx.next();
-      } while (utils::isdigit(*last) || *last == '.');
+      } while (utils::isdigit(last) || *last == '.');
       toks.push_back(std::make_unique<token>(token::type::number, numstr));
       continue;
     }
