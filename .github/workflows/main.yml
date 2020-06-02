@@ -24,15 +24,9 @@ jobs:
     - uses: actions/setup-python@v1
     - uses: BSFishy/meson-build@v1.0.1
       with:
-        action: build
+        action: test
         directory: build
         options: --verbose
         setup-options: -Db_coverage=false
         meson-version: 0.53.2
         ninja-version: 1.9.0.post1
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v2
-    - name: ast test
-      run: ./build/test/ast
-    - name: token test
-      run: ./build/test/tokenizer
