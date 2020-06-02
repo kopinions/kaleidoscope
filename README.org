@@ -1,0 +1,3 @@
+* kaleidoscope
+Kaleidoscope is a tutorial for llvm frontend project
+[[https://github.com/kopinions/kaleidoscope/workflows/meson%2520test/badge.svg?branch=master][kaleidoscope status]]
