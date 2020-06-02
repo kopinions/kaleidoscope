@@ -1,3 +1,8 @@
 * kaleidoscope
 Kaleidoscope is a tutorial for llvm frontend project
-[[https://github.com/kopinions/kaleidoscope/workflows/meson%20test/badge.svg?branch=master][kaleidoscope status]]
+
+#+BEGIN_HTML
+<a href="https://github.com/kopinions/kaleidoscope/workflows/meson%20test">
+  <img src="https://github.com/kopinions/kaleidoscope/workflows/meson%20test/badge.svg?branch=master"/>
+</a>
+#+END_HTML_
