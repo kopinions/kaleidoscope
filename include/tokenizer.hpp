@@ -1,9 +1,10 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
 #include "token.hpp"
-#include <mutex>
+#include "utils.hpp"
 #include <iostream>
 #include <list>
+#include <mutex>
 #include <optional>
 #include <string>
 
@@ -60,22 +61,24 @@ private:
   std::string _context;
 };
 
+
+
 std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
   std::list<std::unique_ptr<token>> toks;
   context ctx(in);
   for (auto last = ctx.next(); last != std::nullopt; last = ctx.next()) {
     std::string identifier_;
 
-    while (std::isspace(*last)) {
+    while (utils::isspace(*last)) {
       last = ctx.next();
       if (last == std::nullopt) {
         return toks;
       }
     }
 
-    if (std::isalpha(*last)) {
+    if (utils::isalpha(*last)) {
       identifier_ = *last;
-      while ((last = ctx.next()) != std::nullopt && std::isalnum(*last)) {
+      while ((last = ctx.next()) != std::nullopt && utils::isalnum(*last)) {
         identifier_ += *last;
       }
 
@@ -91,12 +94,12 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
       continue;
     }
 
-    if (std::isdigit(*last) || *last == '.') {
+    if (utils::isdigit(*last) || *last == '.') {
       std::string numstr;
       do {
         numstr += *last;
         last = ctx.next();
-      } while (std::isdigit(*last) || *last == '.');
+      } while (utils::isdigit(*last) || *last == '.');
       toks.push_back(std::make_unique<token>(token::type::number, numstr));
       continue;
     }
