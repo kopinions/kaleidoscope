@@ -1,7 +1,7 @@
 #include "ast.hpp"
+#include "llvm_ir_visitor.hpp"
 #include "parser.hpp"
 #include "tokenizer.hpp"
-#include "llvm_ir_visitor.hpp"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 
@@ -61,6 +61,8 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
   auto visitor = std::make_shared<llvm_ir_visitor>();
   tu.front()->accept(visitor);
   ASSERT_THAT(visitor->collect().size(), testing::Eq(1));
+  llvm::Value** v = visitor->collect().front().get();
+  ASSERT_TRUE(llvm::isa<llvm::Function>(**v));
 }
 
 int main(int argc, char **argv) {
