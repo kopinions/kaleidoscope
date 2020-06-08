@@ -33,19 +33,24 @@ private:
   std::unique_ptr<ast::function_definition>
   function_definition(std::list<std::unique_ptr<token>>::const_iterator &it) {
     it++; // def
-    std::list<std::unique_ptr<ast::node>> args;
+    std::string funid = (*it)->val()->string();
+    it++; // identifier
+    std::list<std::unique_ptr<ast::function_parameter>> args;
     if ((*it)->type() == token::type::lparen) {
       it++;
-      while((*it)->type() != token::type::rparen) {
-        args.push_back(std::make_unique<ast::variable>());
+      while ((*it)->type() != token::type::rparen) {
+        if ((*it)->type() == token::type::identifier) {
+          args.push_back(std::make_unique<ast::function_parameter>(
+              (*it)->val()->string()));
+        }
         it++;
       }
     }
+    it++; // )
     it++; // {
-    auto prototype = std::make_unique<ast::function>((*it)->val()->string(),
-                                                     std::move(args));
+    auto prototype = std::make_unique<ast::function>(funid, std::move(args));
     std::list<std::unique_ptr<ast::node>> compounded;
-    while((*it)->type() != token::type::rbracket) {
+    while ((*it)->type() != token::type::rbracket) {
       compounded.push_back(std::make_unique<ast::variable>());
       it++;
     }

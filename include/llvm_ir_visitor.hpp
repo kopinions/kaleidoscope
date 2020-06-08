@@ -43,13 +43,16 @@ public:
     llvm::Function *F = llvm::Function::Create(
         FT, llvm::Function::ExternalLinkage, f->identifier(), TheModule.get());
 
-    // Set names for all arguments.
-    //    unsigned Idx = 0;
-    //    for (auto &Arg : F->args()) {
-    //      Arg.setName(params[Idx++]);
-    //    }
+    for (auto &Arg : F->args()) {
+      std::reference_wrapper<ast::function_parameter> a = params.front();
+      Arg.setName(a.get().identifier());
+      params.pop_front();
+    }
     values.push_back(std::make_shared<llvm::Value *>(F));
   }
+
+  virtual void visit(ast::function_parameter *) {};
+
   virtual void visit(ast::compound *) {}
 
   virtual std::list<std::shared_ptr<llvm::Value *>> collect() { return values; }

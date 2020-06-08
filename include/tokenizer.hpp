@@ -66,13 +66,13 @@ private:
 std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
   std::list<std::unique_ptr<token>> toks;
   context ctx(in);
-  for (auto last = ctx.next(); last != std::nullopt; last = ctx.next()) {
+  for (auto last = ctx.next(); last != std::nullopt; ) {
     std::string identifier_;
 
     while (utils::isspace(last)) {
       last = ctx.next();
       if (last == std::nullopt) {
-        return toks;
+        break;
       }
     }
 
@@ -115,22 +115,37 @@ std::list<std::unique_ptr<token>> tokenizer::tokenize(const std::string &in) {
     case '+':
       toks.push_back(std::make_unique<token>(token::type::plus,
                                              value(std::string(1, *last))));
+      last = ctx.next();
       break;
     case '(':
       toks.push_back(std::make_unique<token>(token::type::lparen,
                                              value(std::string(1, *last))));
+      last = ctx.next();
       break;
     case ')':
       toks.push_back(std::make_unique<token>(token::type::rparen,
                                              value(std::string(1, *last))));
+      last = ctx.next();
       break;
     case '{':
       toks.push_back(std::make_unique<token>(token::type::lbracket,
                                              value(std::string(1, *last))));
+      last = ctx.next();
       break;
     case '}':
       toks.push_back(std::make_unique<token>(token::type::rbracket,
                                              value(std::string(1, *last))));
+      last = ctx.next();
+      break;
+    case ';':
+      toks.push_back(std::make_unique<token>(token::type::semicolon,
+                                             value(std::string(1, *last))));
+      last = ctx.next();
+      break;
+    case ',':
+      toks.push_back(std::make_unique<token>(token::type::comma,
+                                             value(std::string(1, *last))));
+      last = ctx.next();
       break;
     default:
       continue;

@@ -32,7 +32,8 @@ TEST(tokenizer, should_able_to_parse_number_token) {
 
 TEST(tokenizer, should_able_to_parse_comment) {
   tokenizer to;
-  std::list<std::unique_ptr<token>> toks = to.tokenize("#this is a comment\n");
+  std::list<std::unique_ptr<token>> toks;
+  toks = to.tokenize("#this is a comment\n");
   ASSERT_THAT(toks.size(), 1);
   toks = to.tokenize("#this is a comment without newline");
   ASSERT_THAT(toks.size(), 1);
@@ -52,6 +53,15 @@ TEST(tokenizer, should_able_to_return_singular_token) {
   ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::identifier));
   toks.pop_front();
   ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::plus));
+}
+
+TEST(tokenizer, should_able_to_return_lparen) {
+  tokenizer to;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("test(");
+  ASSERT_THAT(toks.size(), 3);
+  ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::identifier));
+  toks.pop_front();
+  ASSERT_THAT(toks.front()->type(), testing::Eq(token::type::lparen));
 }
 
 int main(int argc, char **argv) {

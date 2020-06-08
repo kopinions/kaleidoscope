@@ -33,11 +33,31 @@ public:
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
 };
 
+
+class function_parameter : public node {
+public:
+  function_parameter(std::string identifier): _identifier(identifier) {
+
+  }
+
+  std::string identifier() {
+    return _identifier;
+  }
+
+  virtual void accept(std::shared_ptr<ir_visitor> v) override {
+    v->visit(this);
+  }
+
+private:
+  std::string _identifier;
+};
+
 class function : public node {
 public:
   function(std::string identifier,
-           std::list<std::unique_ptr<ast::node>> parameters)
+           std::list<std::unique_ptr<ast::function_parameter>> parameters)
       : _identifier(identifier), _parameters(std::move(parameters)) {}
+
   virtual void accept(std::shared_ptr<ir_visitor> v) override {
     v->visit(this);
   }
@@ -46,8 +66,8 @@ public:
     return _identifier;
   }
 
-  std::list<std::reference_wrapper<ast::node>> parameters() {
-    std::list<std::reference_wrapper<ast::node>> parametersRefs;
+  std::list<std::reference_wrapper<ast::function_parameter>> parameters() {
+    std::list<std::reference_wrapper<ast::function_parameter>> parametersRefs;
     for (auto &ptr : _parameters) {
       parametersRefs.push_back(std::ref(*ptr));
     }
@@ -57,7 +77,7 @@ public:
 private:
   std::unique_ptr<type> returned;
   std::string _identifier;
-  std::list<std::unique_ptr<ast::node>> _parameters;
+  std::list<std::unique_ptr<ast::function_parameter>> _parameters;
 };
 
 class compound : public node {
