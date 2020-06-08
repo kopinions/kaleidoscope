@@ -61,11 +61,12 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
   auto visitor = std::make_shared<llvm_ir_visitor>();
   tu.front()->accept(visitor);
   ASSERT_THAT(visitor->collect().size(), testing::Eq(1));
-  llvm::Value** v = visitor->collect().front().get();
+  llvm::Value **v = visitor->collect().front().get();
   ASSERT_TRUE(llvm::isa<llvm::Function>(**v));
 
   auto f = llvm::dyn_cast<llvm::Function>(*v);
   ASSERT_THAT(f->arg_size(), testing::Eq(2));
+
 }
 
 int main(int argc, char **argv) {

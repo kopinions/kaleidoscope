@@ -6,7 +6,7 @@ parser_files = files(
 libparser = static_library(
   'parser',
   [parser_files],
-  include_directories : [inc_src],
+  include_directories : [inc_src, inc_headers],
   dependencies : []
 )
 
@@ -18,7 +18,7 @@ main = executable(
   dependencies : [
   llvm_dep
   ],
-  include_directories : [inc_src],
+  include_directories : [inc_src, inc_headers],
   link_with : [libparser],
   build_by_default : true
 )

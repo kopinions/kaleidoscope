@@ -13,22 +13,48 @@
 #include <llvm/IR/LLVMContext.h>
 #include <llvm/IR/Module.h>
 #include <llvm/IR/Type.h>
+#include <llvm/IR/Verifier.h>
 #include <memory>
 
 class llvm_ir_visitor : public ir_visitor, public collector {
 public:
-  llvm_ir_visitor() : Builder(TheContext) {
+  llvm_ir_visitor() : Builder(TheContext), NamedValues() {
     TheModule = std::make_unique<llvm::Module>("my cool jit", TheContext);
   }
   virtual ~llvm_ir_visitor(){};
 
   virtual void visit(ast::function_definition *def) {
-    llvm::Function *TheFunction =
-        TheModule->getFunction(def->prototype()->identifier());
-    if (!TheFunction) {
+    if (!TheModule->getFunction(def->prototype()->identifier())) {
       visit(def->prototype());
     }
-    visit(def->body());
+
+    llvm::Function *TheFunction =
+        TheModule->getFunction(def->prototype()->identifier());
+
+    llvm::BasicBlock *BB =
+        llvm::BasicBlock::Create(TheContext, "entry", TheFunction);
+    Builder.SetInsertPoint(BB);
+
+    NamedValues.clear();
+    for (auto &Arg : TheFunction->args()) {
+      NamedValues[std::string(Arg.getName())] = &Arg;
+    }
+
+    auto visitor = std::make_shared<llvm_ir_visitor>();
+    def->body()->accept(visitor);
+    auto statements = visitor->collect();
+    if (llvm::Value *RetVal =
+            (statements.empty()
+                 ? llvm::ConstantFP::get(TheContext, llvm::APFloat(0.0))
+                 : (*(statements.back().get())))) {
+
+      Builder.CreateRet(RetVal);
+      llvm::verifyFunction(*TheFunction);
+      values.push_back(std::make_shared<llvm::Value *>(TheFunction));
+      return;
+    }
+
+    TheFunction->eraseFromParent();
   }
   virtual void visit(ast::variable *) {}
   virtual void visit(ast::number *) {}
@@ -48,10 +74,9 @@ public:
       Arg.setName(a.get().identifier());
       params.pop_front();
     }
-    values.push_back(std::make_shared<llvm::Value *>(F));
   }
 
-  virtual void visit(ast::function_parameter *) {};
+  virtual void visit(ast::function_parameter *){};
 
   virtual void visit(ast::compound *) {}
 
