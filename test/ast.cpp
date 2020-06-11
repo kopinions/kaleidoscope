@@ -21,6 +21,12 @@ TEST(ast, should_able_to_parse_variable_ast) {
   testing::Matcher<ast::node *> matcher = testing::ResultOf(
       & instanceof <ast::variable, ast::node>, testing::IsTrue());
   EXPECT_TRUE(matcher.Matches(tu.front().get()));
+
+  auto visitor = std::make_shared<llvm_ir_visitor>();
+  tu.front()->accept(visitor);
+  ASSERT_THAT(visitor->collect().size(), testing::Eq(1));
+  llvm::Value **v = visitor->collect().front().get();
+  ASSERT_TRUE(llvm::isa<llvm::Value>(**v));
 }
 
 TEST(ast, should_able_to_parse_number_ast) {
@@ -32,6 +38,12 @@ TEST(ast, should_able_to_parse_number_ast) {
   testing::Matcher<ast::node *> matcher = testing::ResultOf(
       & instanceof <ast::number, ast::node>, testing::IsTrue());
   EXPECT_TRUE(matcher.Matches(tu.front().get()));
+
+  auto visitor = std::make_shared<llvm_ir_visitor>();
+  tu.front()->accept(visitor);
+  ASSERT_THAT(visitor->collect().size(), testing::Eq(1));
+  llvm::Value **v = visitor->collect().front().get();
+  ASSERT_TRUE(llvm::isa<llvm::ConstantFP>(**v));
 }
 
 TEST(ast, should_able_to_parse_def_ast) {
@@ -66,7 +78,6 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
 
   auto f = llvm::dyn_cast<llvm::Function>(*v);
   ASSERT_THAT(f->arg_size(), testing::Eq(2));
-
 }
 
 int main(int argc, char **argv) {

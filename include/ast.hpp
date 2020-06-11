@@ -18,14 +18,23 @@ protected:
 
 class variable : public node {
 public:
-  variable() : node() {}
+  variable(std::string name) : _name(name) {}
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+
+  std::string name() { return _name; }
+
+private:
+  std::string _name;
 };
 
 class number : public node {
 public:
-  number() : node() {}
+  number(double v) : _v(v) {}
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+  double v() { return _v; }
+
+private:
+  double _v;
 };
 
 class type : public node {
@@ -33,16 +42,11 @@ public:
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
 };
 
-
 class function_parameter : public node {
 public:
-  function_parameter(std::string identifier): _identifier(identifier) {
+  function_parameter(std::string identifier) : _identifier(identifier) {}
 
-  }
-
-  std::string identifier() {
-    return _identifier;
-  }
+  std::string identifier() { return _identifier; }
 
   virtual void accept(std::shared_ptr<ir_visitor> v) override {
     v->visit(this);
@@ -62,9 +66,7 @@ public:
     v->visit(this);
   }
 
-  std::string identifier() {
-    return _identifier;
-  }
+  std::string identifier() { return _identifier; }
 
   std::list<std::reference_wrapper<ast::function_parameter>> parameters() {
     std::list<std::reference_wrapper<ast::function_parameter>> parametersRefs;
@@ -95,6 +97,7 @@ private:
 
 class function_definition : public node {
   friend class ir_visitor;
+
 public:
   virtual void accept(std::shared_ptr<ir_visitor> v) override {
     v->visit(this);
@@ -104,8 +107,8 @@ public:
                       std::unique_ptr<compound> body)
       : _prototype(std::move(prototype)), _body(std::move(body)) {}
 
-  function* prototype() { return _prototype.get(); }
-  compound* body() { return _body.get(); }
+  function *prototype() { return _prototype.get(); }
+  compound *body() { return _body.get(); }
 
 private:
   std::unique_ptr<function> _prototype;

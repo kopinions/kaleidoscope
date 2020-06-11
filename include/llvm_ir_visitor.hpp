@@ -3,6 +3,7 @@
 #include "ast.hpp"
 #include "collector.hpp"
 #include "ir_visitor.hpp"
+#include <iostream>
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
 #include <llvm/IR/BasicBlock.h>
@@ -56,8 +57,17 @@ public:
 
     TheFunction->eraseFromParent();
   }
-  virtual void visit(ast::variable *) {}
-  virtual void visit(ast::number *) {}
+  virtual void visit(ast::variable *v) {
+    llvm::Value *V = NamedValues[v->name()];
+    if (!V) {
+      std::cout << "error no v";
+    }
+    values.push_back(std::make_shared<llvm::Value *>(V));
+  }
+  virtual void visit(ast::number *n) {
+    values.push_back(std::make_shared<llvm::Value *>(
+        llvm::ConstantFP::get(TheContext, llvm::APFloat(n->v()))));
+  }
   virtual void visit(ast::type *) {}
   virtual void visit(ast::function *f) {
     auto params = f->parameters();

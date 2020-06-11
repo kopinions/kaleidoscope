@@ -9,6 +9,9 @@ class value {
 public:
   value(std::string v) : _v(std::move(v)) {}
   std::string string() { return _v; };
+  double d() {
+    return std::stod(_v);
+  }
 
 private:
   std::string _v;

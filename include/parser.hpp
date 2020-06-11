@@ -12,10 +12,10 @@ public:
     for (auto it = toks.begin(); it != toks.end(); it++) {
       switch ((*it)->type()) {
       case token::type::identifier:
-        tu.push_back(std::make_unique<ast::variable>());
+        tu.push_back(std::make_unique<ast::variable>((*it)->val()->string()));
         break;
       case token::type::number:
-        tu.push_back(std::make_unique<ast::number>());
+        tu.push_back(std::make_unique<ast::number>((*it)->val()->d()));
         break;
       case token::type::def: {
         tu.push_back(function_definition(it));
@@ -51,7 +51,7 @@ private:
     auto prototype = std::make_unique<ast::function>(funid, std::move(args));
     std::list<std::unique_ptr<ast::node>> compounded;
     while ((*it)->type() != token::type::rbracket) {
-      compounded.push_back(std::make_unique<ast::variable>());
+      compounded.push_back(std::make_unique<ast::variable>(""));
       it++;
     }
     auto body = std::make_unique<ast::compound>(std::move(compounded));
