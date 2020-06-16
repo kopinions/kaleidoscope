@@ -89,8 +89,28 @@ public:
   virtual void visit(ast::function_parameter *){};
 
   virtual void visit(ast::compound *) {}
+  virtual void visit(ast::expr *) {}
 
-  virtual void visit(ast::call *) {}
+  virtual void visit(ast::call *c) {
+    llvm::Function *CalleeF = TheModule->getFunction(c->callee());
+    if (!CalleeF)
+      return;
+
+    // If argument mismatch error.
+    auto Args = c->args();
+    if (CalleeF->arg_size() != Args.size())
+      return;
+
+    std::vector<llvm::Value *> ArgsV;
+    for (unsigned i = 0, e = Args.size(); i != e; ++i) {
+//      ArgsV.push_back(Args[i]->codegen());
+//      if (!ArgsV.back())
+//        return nullptr;
+    }
+
+    values.push_back(std::make_shared<llvm::Value *>(
+        Builder.CreateCall(CalleeF, ArgsV, "calltmp")));
+  }
 
   virtual std::list<std::shared_ptr<llvm::Value *>> collect() { return values; }
 

@@ -11,6 +11,7 @@ class function;
 class function_definition;
 class function_parameter;
 class call;
+class expr;
 } // namespace ast
 
 class ir_visitor {
@@ -24,5 +25,6 @@ public:
   virtual void visit(ast::function_parameter *) = 0;
   virtual void visit(ast::compound *) = 0;
   virtual void visit(ast::call *) = 0;
+  virtual void visit(ast::expr *) = 0;
 };
 #endif // IR_VISITOR_HPP

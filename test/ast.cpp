@@ -83,9 +83,19 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
 TEST(ast, should_able_to_parse_the_func_call) {
   tokenizer to;
   parser parser;
-  std::list<std::unique_ptr<token>> toks = to.tokenize("test(1)");
+  std::list<std::unique_ptr<token>> toks = to.tokenize("def test(a){}"
+                                                       "test(1)");
   translation_unit tu = parser.parse(toks);
-  ASSERT_THAT(tu.size(), testing::Eq(1));
+  ASSERT_THAT(tu.size(), testing::Eq(2));
+  auto visitor = std::make_shared<llvm_ir_visitor>();
+  tu.front()->accept(visitor);
+  tu.pop_front();
+  tu.front()->accept(visitor);
+  auto inst = visitor->collect();
+  ASSERT_THAT(inst.size(), testing::Eq(2));
+  inst.pop_front();
+  llvm::Value **v = inst.front().get();
+  ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
 }
 
 int main(int argc, char **argv) {

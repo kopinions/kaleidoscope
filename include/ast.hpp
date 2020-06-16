@@ -4,6 +4,7 @@
 #include <list>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace ast {
 
@@ -27,12 +28,32 @@ private:
   std::string _name;
 };
 
+class expr : public node {
+public:
+  expr() {}
+  void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+};
+
 class call : public node {
 public:
-  call() {}
+  call(std::string callee, std::vector<std::unique_ptr<expr>> args)
+      : _callee(callee), _args(std::move(args)) {}
+
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
 
+  std::string callee() { return _callee; }
+
+  std::list<std::reference_wrapper<ast::expr>> args() {
+    std::list<std::reference_wrapper<ast::expr>> argsRefs;
+    for (auto &ptr : _args) {
+      argsRefs.push_back(std::ref(*ptr));
+    }
+    return argsRefs;
+  }
+
 private:
+  std::string _callee;
+  std::vector<std::unique_ptr<expr>> _args;
 };
 
 class number : public node {
