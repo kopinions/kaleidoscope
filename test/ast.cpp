@@ -80,6 +80,14 @@ TEST(ast, should_able_to_parse_multiple_argument_def) {
   ASSERT_THAT(f->arg_size(), testing::Eq(2));
 }
 
+TEST(ast, should_able_to_parse_the_func_call) {
+  tokenizer to;
+  parser parser;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("test(1)");
+  translation_unit tu = parser.parse(toks);
+  ASSERT_THAT(tu.size(), testing::Eq(1));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

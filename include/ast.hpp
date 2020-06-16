@@ -27,6 +27,14 @@ private:
   std::string _name;
 };
 
+class call : public node {
+public:
+  call() {}
+  void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
+
+private:
+};
+
 class number : public node {
 public:
   number(double v) : _v(v) {}

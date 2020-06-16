@@ -90,6 +90,8 @@ public:
 
   virtual void visit(ast::compound *) {}
 
+  virtual void visit(ast::call *) {}
+
   virtual std::list<std::shared_ptr<llvm::Value *>> collect() { return values; }
 
 private:

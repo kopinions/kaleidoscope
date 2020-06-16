@@ -12,7 +12,7 @@ public:
     for (auto it = toks.begin(); it != toks.end(); it++) {
       switch ((*it)->type()) {
       case token::type::identifier:
-        tu.push_back(std::make_unique<ast::variable>((*it)->val()->string()));
+        tu.push_back(identifier_handler(it));
         break;
       case token::type::number:
         tu.push_back(std::make_unique<ast::number>((*it)->val()->d()));
@@ -30,6 +30,21 @@ public:
   parser() {}
 
 private:
+  std::unique_ptr<ast::node>
+  identifier_handler(std::list<std::unique_ptr<token>>::const_iterator &it) {
+    auto id = *(*it).get();
+    // eat identifier
+    if ((*(++it))->type() != token::type::lparen) {
+      return std::make_unique<ast::variable>(id.val()->string());
+    }
+
+    it++; // eat (
+    it++; // eat parameter
+    it++; // eat )
+    return std::make_unique<ast::call>();
+
+  }
+
   std::unique_ptr<ast::function_definition>
   function_definition(std::list<std::unique_ptr<token>>::const_iterator &it) {
     it++; // def

@@ -44,6 +44,10 @@ public:
   token(type t, value val) : _type(t), _val(std::make_unique<value>(val)) {}
   std::unique_ptr<value> val() { return std::move(_val); }
   enum type type() { return _type; }
+  token(token &tok) {
+    _type = tok._type;
+    _val = std::move(tok._val);
+  }
 
 private:
   enum type _type;
