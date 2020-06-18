@@ -97,8 +97,13 @@ TEST(ast, should_able_to_parse_the_func_call) {
   llvm::Value **v = inst.front().get();
   ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
 
-  auto f = llvm::dyn_cast<llvm::CallInst>(*v);
-  ASSERT_THAT(f->arg_size(), testing::Eq(1));
+  auto call = llvm::dyn_cast<llvm::CallInst>(*v);
+  ASSERT_THAT(call->arg_size(), testing::Eq(1));
+  auto argsIterator = call->args().begin();
+  ASSERT_TRUE(llvm::isa<llvm::ConstantFP>(*argsIterator));
+  llvm::APFloat arg =
+      llvm::dyn_cast<llvm::ConstantFP>(*argsIterator)->getValueAPF();
+  ASSERT_THAT(arg.convertToFloat(), testing::FloatEq(1.0f));
 }
 
 int main(int argc, char **argv) {

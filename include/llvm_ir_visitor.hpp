@@ -65,8 +65,8 @@ public:
     values.push_back(std::make_shared<llvm::Value *>(V));
   }
   virtual void visit(ast::number *n) {
-    values.push_back(std::make_shared<llvm::Value *>(
-        llvm::ConstantFP::get(TheContext, llvm::APFloat(n->v()))));
+    auto v = llvm::ConstantFP::get(TheContext, llvm::APFloat((float)n->v()));
+    values.push_back(std::make_shared<llvm::Value *>(v));
   }
   virtual void visit(ast::type *) {}
   virtual void visit(ast::function *f) {

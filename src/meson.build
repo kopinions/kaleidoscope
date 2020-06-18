@@ -19,6 +19,5 @@ main = executable(
   llvm_dep
   ],
   include_directories : [inc_src, inc_headers],
-  link_with : [libparser],
-  build_by_default : true
+  link_with : [libparser]
 )
