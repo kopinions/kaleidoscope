@@ -36,15 +36,15 @@ public:
 
 class call : public node {
 public:
-  call(std::string callee, std::vector<std::unique_ptr<expr>> args)
+  call(std::string callee, std::vector<std::unique_ptr<node>> args)
       : _callee(callee), _args(std::move(args)) {}
 
   void accept(std::shared_ptr<ir_visitor> v) override { v->visit(this); }
 
   std::string callee() { return _callee; }
 
-  std::list<std::reference_wrapper<ast::expr>> args() {
-    std::list<std::reference_wrapper<ast::expr>> argsRefs;
+  std::list<std::reference_wrapper<ast::node>> args() {
+    std::list<std::reference_wrapper<ast::node>> argsRefs;
     for (auto &ptr : _args) {
       argsRefs.push_back(std::ref(*ptr));
     }
@@ -53,7 +53,7 @@ public:
 
 private:
   std::string _callee;
-  std::vector<std::unique_ptr<expr>> _args;
+  std::vector<std::unique_ptr<node>> _args;
 };
 
 class number : public node {

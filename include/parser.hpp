@@ -41,8 +41,8 @@ private:
     it++; // eat (
     it++; // eat parameter
     it++; // eat )
-    std::vector<std::unique_ptr<ast::expr>> args;
-    args.push_back(std::make_unique<ast::expr>());
+    std::vector<std::unique_ptr<ast::node>> args;
+    args.push_back(std::make_unique<ast::number>(1));
     return std::make_unique<ast::call>(id.val()->string(), std::move(args));
   }
 

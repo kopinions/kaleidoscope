@@ -96,6 +96,9 @@ TEST(ast, should_able_to_parse_the_func_call) {
   inst.pop_front();
   llvm::Value **v = inst.front().get();
   ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
+
+  auto f = llvm::dyn_cast<llvm::CallInst>(*v);
+  ASSERT_THAT(f->arg_size(), testing::Eq(1));
 }
 
 int main(int argc, char **argv) {

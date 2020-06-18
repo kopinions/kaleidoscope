@@ -102,10 +102,15 @@ public:
       return;
 
     std::vector<llvm::Value *> ArgsV;
-    for (unsigned i = 0, e = Args.size(); i != e; ++i) {
-//      ArgsV.push_back(Args[i]->codegen());
-//      if (!ArgsV.back())
-//        return nullptr;
+    for (auto &arg : Args) {
+      auto visitor = std::make_shared<llvm_ir_visitor>();
+      arg.get().accept(visitor);
+      auto exprs = visitor->collect();
+      auto r = exprs.front().get();
+      ArgsV.push_back(*r);
+      if (!ArgsV.back()) {
+        return;
+      }
     }
 
     values.push_back(std::make_shared<llvm::Value *>(
