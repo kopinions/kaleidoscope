@@ -106,6 +106,38 @@ TEST(ast, should_able_to_parse_the_func_call) {
   ASSERT_THAT(arg.convertToFloat(), testing::FloatEq(1.0f));
 }
 
+TEST(ast, should_able_to_parse_the_double_parameter_func_call) {
+  tokenizer to;
+  parser parser;
+  std::list<std::unique_ptr<token>> toks = to.tokenize("def test(a, b){}"
+                                                       "test(1, 3)");
+  translation_unit tu = parser.parse(toks);
+  ASSERT_THAT(tu.size(), testing::Eq(2));
+  auto visitor = std::make_shared<llvm_ir_visitor>();
+  tu.front()->accept(visitor);
+  tu.pop_front();
+  tu.front()->accept(visitor);
+  auto inst = visitor->collect();
+  ASSERT_THAT(inst.size(), testing::Eq(2));
+  inst.pop_front();
+  llvm::Value **v = inst.front().get();
+  ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
+
+  auto call = llvm::dyn_cast<llvm::CallInst>(*v);
+  ASSERT_THAT(call->arg_size(), testing::Eq(2));
+  auto argsIterator = call->args().begin();
+  ASSERT_TRUE(llvm::isa<llvm::ConstantFP>(*argsIterator));
+//
+//  ASSERT_THAT(llvm::dyn_cast<llvm::ConstantFP>(*argsIterator)
+//                  ->getValueAPF()
+//                  .convertToFloat(),
+//              testing::FloatEq(3.0f));
+//  ASSERT_THAT(llvm::dyn_cast<llvm::ConstantFP>(*(++argsIterator))
+//                  ->getValueAPF()
+//                  .convertToFloat(),
+//              testing::FloatEq(3.0f));
+}
+
 int main(int argc, char **argv) {
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();

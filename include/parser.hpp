@@ -17,9 +17,9 @@ public:
       case token::type::number:
         tu.push_back(std::make_unique<ast::number>((*it)->val()->d()));
         break;
-      case token::type::def: {
+      case token::type::def:
         tu.push_back(function_definition(it));
-      } break;
+        break;
       default:
         continue;
       }
@@ -31,18 +31,57 @@ public:
 
 private:
   std::unique_ptr<ast::node>
+  number(std::list<std::unique_ptr<token>>::const_iterator &it) {
+    auto Result = std::make_unique<ast::number>((*it)->val()->d());
+    it++; // eat number
+    return std::move(Result);
+  }
+  std::unique_ptr<ast::node>
+  expression(std::list<std::unique_ptr<token>>::const_iterator &it) {
+    switch ((*it)->type()) {
+    default:
+      return std::unique_ptr<ast::node>();
+    case token::type::identifier:
+      return identifier_handler(it);
+    case token::type::number:
+      return number(it);
+    }
+    return std::unique_ptr<ast::node>();
+  }
+  std::unique_ptr<ast::node>
   identifier_handler(std::list<std::unique_ptr<token>>::const_iterator &it) {
     auto id = *(*it).get();
     // eat identifier
-    if ((*(++it))->type() != token::type::lparen) {
+    it++;
+    if ((*it)->type() != token::type::lparen) {
       return std::make_unique<ast::variable>(id.val()->string());
     }
 
     it++; // eat (
-    it++; // eat parameter
-    it++; // eat )
     std::vector<std::unique_ptr<ast::node>> args;
-    args.push_back(std::make_unique<ast::number>(1));
+
+    while ((*it)->type() != token::type::rparen) {
+      while (true) {
+        if (auto Arg = expression(it)) {
+          args.push_back(std::move(Arg));
+        } else {
+          return std::unique_ptr<ast::node>();
+        }
+
+        if ((*it)->type() == token::type::rparen) {
+          break;
+        }
+
+        if ((*it)->type() != token::type::comma) {
+          std::cout << "error" << std::endl;
+          return std::unique_ptr<ast::node>();
+        }
+        it++; // eat comma
+      }
+    }
+
+    it++; // eat )
+
     return std::make_unique<ast::call>(id.val()->string(), std::move(args));
   }
 

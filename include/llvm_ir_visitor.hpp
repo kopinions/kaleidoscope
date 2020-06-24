@@ -108,9 +108,6 @@ public:
       auto exprs = visitor->collect();
       auto r = exprs.front().get();
       ArgsV.push_back(*r);
-      if (!ArgsV.back()) {
-        return;
-      }
     }
 
     values.push_back(std::make_shared<llvm::Value *>(
