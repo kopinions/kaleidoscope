@@ -92,9 +92,8 @@ TEST(ast, should_able_to_parse_the_func_call) {
   tu.pop_front();
   tu.front()->accept(visitor);
   auto inst = visitor->collect();
-  ASSERT_THAT(inst.size(), testing::Eq(2));
-  inst.pop_front();
-  llvm::Value **v = inst.front().get();
+  ASSERT_THAT(inst.size(), testing::Eq(3));
+  llvm::Value **v = inst.back().get();
   ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
 
   auto call = llvm::dyn_cast<llvm::CallInst>(*v);
@@ -103,7 +102,7 @@ TEST(ast, should_able_to_parse_the_func_call) {
   ASSERT_TRUE(llvm::isa<llvm::ConstantFP>(*argsIterator));
   llvm::APFloat arg =
       llvm::dyn_cast<llvm::ConstantFP>(*argsIterator)->getValueAPF();
-  ASSERT_THAT(arg.convertToFloat(), testing::FloatEq(1.0f));
+  ASSERT_THAT(arg.convertToDouble(), testing::DoubleEq(1.0f));
 }
 
 TEST(ast, should_able_to_parse_the_double_parameter_func_call) {
@@ -118,9 +117,8 @@ TEST(ast, should_able_to_parse_the_double_parameter_func_call) {
   tu.pop_front();
   tu.front()->accept(visitor);
   auto inst = visitor->collect();
-  ASSERT_THAT(inst.size(), testing::Eq(2));
-  inst.pop_front();
-  llvm::Value **v = inst.front().get();
+  ASSERT_THAT(inst.size(), testing::Eq(4));
+  llvm::Value **v = inst.back().get();
   ASSERT_TRUE(llvm::isa<llvm::CallInst>(**v));
 
   auto call = llvm::dyn_cast<llvm::CallInst>(*v);
